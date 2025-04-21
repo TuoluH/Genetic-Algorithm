@@ -2,6 +2,7 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 const popSize = 100;
 const mutationRate = 0.01;
+let currLetter = 65;
 let gens = 0;
 let cities = []
 let population = [];
@@ -10,50 +11,66 @@ let shortestDist = "";
 function setup() {
   createCanvas(width, height);
   for (let i = 0; i < 20; i++) {
-    cities.push(new city);
+    (cities.push(new City));
   }
   createInitialPop();
-  console.log(population)
+  console.log(cities);
 }
 
 function draw() {
   background(255);
   fill(0)
   cities.forEach(c => circle(c.x, c.y, 10));
-//   textSize(50);
-//   textAlign(LEFT, TOP);
-//   text("Current Best:", 10, 10);
-//   textSize(12);
-//   text(population.join("\n"), width * 0.75, 0);
-//   textSize(20);
-//   text("Target Phrase: " + phrase, 10, height * 0.5);
-//   text("Generations: " + gens, 10, height * 0.5 + 30);
-//   text("Mutation Rate: " + mutationRate, 10, height * 0.5 + 60);
-//   createNewPop(calcFitness());
+  //   textSize(50);
+  //   textAlign(LEFT, TOP);
+  //   text("Current Best:", 10, 10);
+  //   textSize(12);
+  //   text(population.join("\n"), width * 0.75, 0);
+  //   textSize(20);
+  //   text("Target Phrase: " + phrase, 10, height * 0.5);
+  //   text("Generations: " + gens, 10, height * 0.5 + 30);
+  //   text("Mutation Rate: " + mutationRate, 10, height * 0.5 + 60);
+  //   createNewPop(calcFitness());
   textSize(40);
   text(shortestDist, 10, 60);
 }
 
-class city {
-    constructor() {
-        this.x = random(0, width);
-        this.y = random(0, height);
+class City {
+  constructor() {
+    this.name = String.fromCharCode(currLetter);
+    this.x = random(0, width);
+    this.y = random(0, height);
+    currLetter++;
+  }
+}
+
+class Route {
+  constructor() {
+    this.route = makeRoute(cities);
+    this.dist = 0;
+  }
+
+  calcDist() {
+    let totalDist = 0;
+    for (let c = 1; c < this.length; c++) {
+      
     }
+  }
 }
 
 function createInitialPop() {
   for (let r = 0; r < popSize; r++) {
-    population.push(makeRoute());
+    population.push(new Route);
   }
 }
 
-function makeRoute(citiesLeft = cities) {
-    if (citiesLeft = []) {
-        return null;
-    }
+function makeRoute(citiesLeft) {
+  if (citiesLeft.length == 0) {
+    return [];
+  }
 
-    let city = random(citiesLeft);
-    return [city, makeRoute([cities.splice(0, cities.indexOf(city)), cities.splice(cities.indexOf(city) + 1)].flat())].flat(20);
+  let city = random(citiesLeft);
+  return [city, makeRoute(citiesLeft.filter(c => c != city))].flat(20);
 }
 
 function calcFitness() {
