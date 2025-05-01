@@ -6,7 +6,7 @@ function partiallyMapped(p1, p2) {
     route = route.flat();
 
     for (let s = 0; s < startNum; s++) {
-        route[s] = findMatch(route, p2, s);
+        random(0, 1) < mutationRate ? route[s] = chooseRandom(route) : route[s] = findMatch(route, p2, s);
     }
 
     for (let e = route.length; e < numCities; e++) {
@@ -70,4 +70,8 @@ function cycle(p1, p2) {
     }
 
     return route;
+}
+
+function chooseRandom(route) {
+    return random(cities.filter(c => !route.includes(c)));
 }
