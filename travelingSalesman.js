@@ -1,9 +1,9 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
-const numCities = 20;
+const numCities = 15;
 const maxDist = (((width ** 2) + (height ** 2)) ** 0.5) * numCities;
 const popSize = 100;
-const mutationRate = 0.01;
+const mutationRate = 0.10;
 let currLetter = 65;
 let gens = 0;
 let cities = []
@@ -56,17 +56,14 @@ class City {
 
 function createInitialPop() {
   for (let r = 0; r < popSize; r++) {
-    population.push(makeRoute(cities));
+    let citiesLeft = cities;
+    let route = [];
+    for (let c = 0; c < numCities; c++) {
+      route.push(random(citiesLeft));
+      citiesLeft = citiesLeft.filter(city => !route.includes(city));
+    }
+    population.push(route);
   }
-}
-
-function makeRoute(citiesLeft) {
-  if (citiesLeft.length == 0) {
-    return [];
-  }
-
-  let city = random(citiesLeft);
-  return [city, makeRoute(citiesLeft.filter(c => c != city))].flat(numCities);
 }
 
 function calcFitness() {
